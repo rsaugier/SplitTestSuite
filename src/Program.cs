@@ -17,6 +17,14 @@ namespace SplitTestSuite
         OrderedTest
     }
 
+    enum Granularity
+    {
+        Method,
+        Class,
+        Namespace,
+        Assembly
+    }
+
     class ProgramParams
     {
         public ProgramParams(
@@ -25,7 +33,8 @@ namespace SplitTestSuite
             int? part,
             string outputPath,
             bool quiet,
-            OutputFormat outputFormat)
+            OutputFormat outputFormat,
+            Granularity granularity)
         {
             this.TestSuitePath = testSuitePath;
             this.NumParts = numParts;
@@ -33,6 +42,7 @@ namespace SplitTestSuite
             this.OutputPath = outputPath;
             this.Quiet = quiet;
             this.OutputFormat = outputFormat;
+            this.Granularity = granularity;
         }
 
         [Value(0,
@@ -69,6 +79,13 @@ namespace SplitTestSuite
             Required = false,
             HelpText = "The output file format. If not specified, will be deduced from output file extension.")]
         public OutputFormat OutputFormat { get; }
+
+        [Option(
+            'g',
+            "granularity",
+            Required = false,
+            HelpText = "The granularity of the split.")]
+        public Granularity Granularity { get; }
     };
 
     class Program
@@ -145,7 +162,7 @@ namespace SplitTestSuite
         {
             return new TestSuiteSplitter(
                 new RoundRobinSplitStrategy(),
-                new MethodGranularityStrategy());
+                this.CreateGranularityStrategy());
         }
 
         private string SuffixOutputFilePath(string outputPath, int part)
@@ -179,6 +196,23 @@ namespace SplitTestSuite
                     return new PlainTextOutputFormatter();
                 case OutputFormat.OrderedTest:
                     throw new NotImplementedException();
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        private IGranularityStrategy CreateGranularityStrategy()
+        {
+            switch (this.parameters.Granularity)
+            {
+                case Granularity.Method:
+                    return new MethodGranularityStrategy();
+                case Granularity.Class:
+                    return new ClassGranularityStrategy();
+                case Granularity.Namespace:
+                    return new NamespaceGranularityStrategy();
+                case Granularity.Assembly:
+                    return new AssemblyGranularityStrategy();
                 default:
                     throw new ArgumentOutOfRangeException();
             }

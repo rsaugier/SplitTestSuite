@@ -14,7 +14,7 @@ namespace SplitTestSuite.TestSuiteTools.Splitting.Granularity
 
         public ITestSuiteBuilder CreateBuilder()
         {
-            return new TestSuiteBuilderAdapter<TestMethod>(new MethodWiseTestSuiteBuilder());
+            return new TestSuiteBuilderAdapter<TestNamespacePart>(new NamespaceWiseTestSuiteBuilder());
         }
     }
 }
