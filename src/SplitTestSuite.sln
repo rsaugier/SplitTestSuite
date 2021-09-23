@@ -4,6 +4,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SplitTestSuite", "SplitTest
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSuiteTools", "TestSuiteTools\TestSuiteTools.csproj", "{C30719C8-5515-4B4C-951A-7FCD2F3C0A05}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{FC150704-3B5C-453E-BBAF-354D17AE7105}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSuiteTools.UnitTests", "TestSuiteTools.UnitTests\TestSuiteTools.UnitTests.csproj", "{9C53416D-2905-4215-95E2-891E945834A3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +22,12 @@ Global
 		{C30719C8-5515-4B4C-951A-7FCD2F3C0A05}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C30719C8-5515-4B4C-951A-7FCD2F3C0A05}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C30719C8-5515-4B4C-951A-7FCD2F3C0A05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C53416D-2905-4215-95E2-891E945834A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C53416D-2905-4215-95E2-891E945834A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C53416D-2905-4215-95E2-891E945834A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C53416D-2905-4215-95E2-891E945834A3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9C53416D-2905-4215-95E2-891E945834A3} = {FC150704-3B5C-453E-BBAF-354D17AE7105}
 	EndGlobalSection
 EndGlobal

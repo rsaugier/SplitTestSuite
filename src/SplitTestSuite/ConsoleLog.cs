@@ -3,22 +3,22 @@ using TestSuiteTools;
 
 namespace SplitTestSuite
 {
-    public class ConsoleUserOutput : IUserOutput
+    public class ConsoleLog : ILog
     {
-        public ConsoleUserOutput()
+        public ConsoleLog()
         {
         }
 
-        public void Say(string message)
+        public void Info(string message)
         {
             Console.WriteLine(message);
         }
 
-        public void Say(params string[] messages)
+        public void Info(params string[] messages)
         {
             foreach (var message in messages)
             {
-                this.Say(message);
+                this.Info(message);
             }
         }
     }

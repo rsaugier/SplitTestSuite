@@ -7,17 +7,17 @@ namespace TestSuiteTools.Discovery
     public class TestsAssemblyReader
     {
         private readonly string assemblyPath;
-        private readonly IUserOutput userOutput;
+        private readonly ILog _log;
 
-        public TestsAssemblyReader(string assemblyPath, IUserOutput userOutput)
+        public TestsAssemblyReader(string assemblyPath, ILog log)
         {
             this.assemblyPath = assemblyPath;
-            this.userOutput = userOutput;
+            this._log = log;
         }
 
         public bool BuildTestSuite(MethodWiseTestSuiteBuilder suiteBuilder)
         {
-            this.userOutput.Say($"Loading assembly {this.assemblyPath} to search for tests");
+            this._log.Info($"Loading assembly {this.assemblyPath} to search for tests");
             Assembly assembly = Assembly.LoadFrom(this.assemblyPath);
 
             bool atLeastOneTestFound = false;

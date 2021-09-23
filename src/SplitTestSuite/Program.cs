@@ -92,12 +92,12 @@ namespace SplitTestSuite
     class Program
     {
         private readonly ProgramParams parameters;
-        private readonly IUserOutput userOutput;
+        private readonly ILog _log;
 
         private Program(ProgramParams parameters)
         {
             this.parameters = parameters;
-            this.userOutput = parameters.Quiet ? new NullUserOutput() : new ConsoleUserOutput();
+            this._log = parameters.Quiet ? new NullLog() : new ConsoleLog();
         }
 
         static void Main(string[] args)
@@ -112,7 +112,7 @@ namespace SplitTestSuite
 
         void SayOptions()
         {
-            this.userOutput.Say(
+            this._log.Info(
                 $"Input tests path: {this.parameters.TestSuitePath}",
                 $"Output file: {this.parameters.OutputPath}",
                 $"Output format: {this.parameters.OutputFormat}",
@@ -123,17 +123,17 @@ namespace SplitTestSuite
         {
             this.SayOptions();
 
-            this.userOutput.Say($"Discovering tests from {this.parameters.TestSuitePath}");
+            this._log.Info($"Discovering tests from {this.parameters.TestSuitePath}");
             var testSuite = this.ReadTestSuite(this.parameters.TestSuitePath);
 
-            this.userOutput.Say($"Splitting tests in {this.parameters.NumParts} parts");
+            this._log.Info($"Splitting tests in {this.parameters.NumParts} parts");
             TestSuiteSplitter splitter = this.CreateTestSuiteSplitter();
             TestSuitePartition testSuitePartition = splitter.Split(testSuite, this.parameters.NumParts);
 
             var outputFormatter = this.CreateOutputFormatter();
             if (this.parameters.Part.HasValue)
             {
-                this.userOutput.Say($"Writing part {this.parameters.Part.Value} to {this.parameters.OutputPath}");
+                this._log.Info($"Writing part {this.parameters.Part.Value} to {this.parameters.OutputPath}");
                 using (var outputStream = this.OpenFile(this.parameters.OutputPath))
                 {
                     outputFormatter.Output(
@@ -147,7 +147,7 @@ namespace SplitTestSuite
                 for (int part = 0; part < this.parameters.NumParts; ++part)
                 {
                     string partOutputPath = this.SuffixOutputFilePath(this.parameters.OutputPath, part);
-                    this.userOutput.Say($"Writing part {part} to {partOutputPath}");
+                    this._log.Info($"Writing part {part} to {partOutputPath}");
                     using (var outputStream = this.OpenFile(partOutputPath))
                     {
                         outputFormatter.Output(
@@ -178,12 +178,12 @@ namespace SplitTestSuite
             MethodWiseTestSuiteBuilder suiteBuilder = new MethodWiseTestSuiteBuilder();
             if (Directory.Exists(testSuitePath))
             {
-                var crawler = new TestsFolderCrawler(testSuitePath, this.userOutput);
+                var crawler = new TestsFolderCrawler(testSuitePath, this._log);
                 crawler.BuildTestSuite(suiteBuilder);
             }
             else if (File.Exists(testSuitePath))
             {
-                var reader = new TestsAssemblyReader(testSuitePath, this.userOutput);
+                var reader = new TestsAssemblyReader(testSuitePath, this._log);
                 reader.BuildTestSuite(suiteBuilder);
             }
             return suiteBuilder.Build();
