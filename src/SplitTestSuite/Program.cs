@@ -1,13 +1,14 @@
 ﻿using System;
 using System.IO;
 using CommandLine;
-using SplitTestSuite.TestSuiteTools.Discovery;
-using SplitTestSuite.TestSuiteTools.Model;
-using SplitTestSuite.TestSuiteTools.Model.Builders;
-using SplitTestSuite.TestSuiteTools.OutputFormats;
-using SplitTestSuite.TestSuiteTools.Splitting;
-using SplitTestSuite.TestSuiteTools.Splitting.Granularity;
-using SplitTestSuite.TestSuiteTools.Splitting.SplitStrategy;
+using TestSuiteTools;
+using TestSuiteTools.Discovery;
+using TestSuiteTools.Model;
+using TestSuiteTools.Model.Builders;
+using TestSuiteTools.OutputFormats;
+using TestSuiteTools.Splitting;
+using TestSuiteTools.Splitting.Granularity;
+using TestSuiteTools.Splitting.SplitStrategy;
 
 namespace SplitTestSuite
 {

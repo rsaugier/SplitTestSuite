@@ -1,4 +1,6 @@
-﻿namespace SplitTestSuite
+﻿using TestSuiteTools;
+
+namespace SplitTestSuite
 {
     public class NullUserOutput : IUserOutput
     {
