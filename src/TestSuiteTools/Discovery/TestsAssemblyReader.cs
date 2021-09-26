@@ -21,11 +21,13 @@ namespace TestSuiteTools.Discovery
             Assembly assembly = Assembly.LoadFrom(this.assemblyPath);
 
             bool atLeastOneTestFound = false;
-            foreach (TypeInfo testClass in assembly.DefinedTypes.Where(t => this.IsTestClass(t)))
+            foreach (TypeInfo typeInfo in assembly.DefinedTypes.Where(this.IsTestClass))
             {
-                foreach (MemberInfo testMethod in testClass.DeclaredMethods.Where(m => this.IsTestMethod(m)))
+                foreach (MethodInfo testMethod in typeInfo.DeclaredMethods.Where(this.IsTestMethod))
                 {
-                    suiteBuilder.AddTestMethod(this.assemblyPath, testClass.Namespace, testClass.Name, testMethod.Name);
+                    if (typeInfo.Namespace != null)
+                        suiteBuilder.AddTestMethod(this.assemblyPath, typeInfo.Namespace, typeInfo.Name,
+                            testMethod.Name);
                     atLeastOneTestFound = true;
                 }
             }

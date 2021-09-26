@@ -14,7 +14,7 @@ namespace TestSuiteTools.Model.Mutable
 
         public MutableTestNamespace GetOrAddNamespace(string nsName)
         {
-            MutableTestNamespace ns = this.Namespaces.GetValueOrDefault(nsName);
+            MutableTestNamespace? ns = this.Namespaces.GetValueOrDefault(nsName);
             if (ns == null)
             {
                 ns = new MutableTestNamespace(nsName);

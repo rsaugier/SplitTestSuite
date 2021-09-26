@@ -7,6 +7,7 @@
     <FileVersion>0.0.1</FileVersion>
     <PackageVersion>0.0.1</PackageVersion>
     <IsPackable>false</IsPackable>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

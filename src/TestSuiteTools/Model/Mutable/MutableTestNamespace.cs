@@ -14,7 +14,7 @@ namespace TestSuiteTools.Model.Mutable
 
         public MutableTestClass GetOrAddClass(string className)
         {
-            MutableTestClass cl = this.Classes.GetValueOrDefault(className);
+            MutableTestClass? cl = this.Classes.GetValueOrDefault(className);
             if (cl == null)
             {
                 cl = new MutableTestClass(className);

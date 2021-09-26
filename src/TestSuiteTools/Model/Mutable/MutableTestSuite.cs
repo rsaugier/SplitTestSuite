@@ -8,7 +8,7 @@ namespace TestSuiteTools.Model.Mutable
 
         public MutableTestAssembly GetOrAddAssembly(string assemblyPath)
         {
-            MutableTestAssembly assembly = this.Assemblies.GetValueOrDefault(assemblyPath);
+            MutableTestAssembly? assembly = this.Assemblies.GetValueOrDefault(assemblyPath);
             if (assembly == null)
             {
                 assembly = new MutableTestAssembly(assemblyPath);
