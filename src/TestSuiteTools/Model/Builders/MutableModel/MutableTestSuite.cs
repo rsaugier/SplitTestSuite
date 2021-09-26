@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TestSuiteTools.Model.Mutable
+namespace TestSuiteTools.Model.Builders.MutableModel
 {
     public class MutableTestSuite
     {

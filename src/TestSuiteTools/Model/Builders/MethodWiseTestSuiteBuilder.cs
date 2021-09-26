@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using TestSuiteTools.Model.Mutable;
+using TestSuiteTools.Model.Builders.MutableModel;
 
 namespace TestSuiteTools.Model.Builders
 {
