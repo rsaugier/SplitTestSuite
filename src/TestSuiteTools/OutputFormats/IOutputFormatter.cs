@@ -5,6 +5,6 @@ namespace TestSuiteTools.OutputFormats
 {
     public interface IOutputFormatter
     {
-        void Output(TestSuite testSuitePart, Stream outputStream);
+        void Output(TestSuitePart testSuitePart, Stream outputStream);
     }
 }

@@ -5,9 +5,9 @@ namespace TestSuiteTools.Splitting
 {
     internal class NullTestSuiteSplitter : ITestSuiteSplitter
     {
-        public TestSuitePartition Split(TestSuite testSuite, int numParts)
+        public TestSuitePartition Split(TestSuitePart testSuite, int numParts)
         {
-            return new TestSuitePartition(new List<TestSuite>(){testSuite});
+            return new TestSuitePartition(new List<TestSuitePart>(){testSuite});
         }
     }
 }

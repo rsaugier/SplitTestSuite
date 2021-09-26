@@ -7,7 +7,7 @@ namespace TestSuiteTools.Splitting.Granularity
 {
     public class MethodGranularityStrategy : IGranularityStrategy
     {
-        public IReadOnlyList<ITestSuitePart> GetItemsFromTestSuite(TestSuite testSuite)
+        public IReadOnlyList<ITestSuitePart> GetItemsFromTestSuite(TestSuitePart testSuite)
         {
             return testSuite.TestAssemblies.SelectMany(
                 a => a.TestNamespaces.SelectMany(

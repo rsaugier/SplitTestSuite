@@ -38,7 +38,7 @@ namespace TestSuiteTools.UnitTests
                 testAssemblyPart
             };
 
-            var testSuite = new TestSuite(testNamespaceLists);
+            var testSuite = new TestSuitePart(testNamespaceLists);
 
             Assert.Equal(1, testSuite.TestAssemblies.Count);
             TestAssemblyPart asmPart = testSuite.TestAssemblies.Single();

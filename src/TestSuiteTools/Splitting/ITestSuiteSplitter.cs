@@ -4,6 +4,6 @@ namespace TestSuiteTools.Splitting
 {
     internal interface ITestSuiteSplitter
     {
-        TestSuitePartition Split(TestSuite testSuite, int numParts);
+        TestSuitePartition Split(TestSuitePart testSuite, int numParts);
     }
 }

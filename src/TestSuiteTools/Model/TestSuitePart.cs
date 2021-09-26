@@ -10,13 +10,13 @@ namespace TestSuiteTools.Model
     /// The important point is that it can be a selection of a set of tests within a physical test suite,
     /// and thus can represent a sub-part of such a suite.
     /// </remarks>
-    public class TestSuite
+    public class TestSuitePart
     {
         private readonly Dictionary<string, TestAssemblyPart> testAssemblies = new();
 
         public IReadOnlyCollection<TestAssemblyPart> TestAssemblies => this.testAssemblies.Values;
 
-        public TestSuite(IReadOnlyCollection<TestAssemblyPart> testNamespaceLists)
+        public TestSuitePart(IReadOnlyCollection<TestAssemblyPart> testNamespaceLists)
         {
             foreach (var testNamespaceList in testNamespaceLists)
             {

@@ -22,7 +22,7 @@ namespace TestSuiteTools.Model.Builders
             this.adapted.AddItem(concreteItem);
         }
 
-        public TestSuite Build()
+        public TestSuitePart Build()
         {
             return this.adapted.Build();
         }

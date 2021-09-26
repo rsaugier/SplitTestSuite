@@ -28,9 +28,9 @@ namespace TestSuiteTools.Model.Builders
                           method.Name);
         }
 
-        public TestSuite Build()
+        public TestSuitePart Build()
         {
-            return new TestSuite(
+            return new TestSuitePart(
                 this.mutableTestSuite.Assemblies.Values.Select(
                     a =>
                     {

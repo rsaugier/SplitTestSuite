@@ -12,7 +12,7 @@ namespace TestSuiteTools.UnitTests
             var builder = new MethodWiseTestSuiteBuilder();
             builder.AddTestMethod("/path/to/Assembly1.dll", "namespace1", "class1", "method1");
             builder.AddTestMethod("/path/to/Assembly2.dll", "namespace2", "class2", "method1");
-            TestSuite _ = builder.Build();
+            TestSuitePart _ = builder.Build();
         }
     }
 }

@@ -17,9 +17,9 @@ namespace TestSuiteTools.Model.Builders
             this.assembliesByPath.Add(assembly.Assembly.Path, assembly);
         }
 
-        public TestSuite Build()
+        public TestSuitePart Build()
         {
-            return new TestSuite(this.assembliesByPath.Values);
+            return new TestSuitePart(this.assembliesByPath.Values);
         }
     }
 }

@@ -21,9 +21,9 @@ namespace TestSuiteTools.Model.Builders
             this.partByNamespace[ns] = item;
         }
 
-        public TestSuite Build()
+        public TestSuitePart Build()
         {
-            return new TestSuite(
+            return new TestSuitePart(
                 this.mutableTestSuite.Assemblies.Values.Select(
                     a =>
                     {

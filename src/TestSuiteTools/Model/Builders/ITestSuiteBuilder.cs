@@ -3,12 +3,12 @@
     public interface ITestSuiteBuilder
     {
         void AddItem(ITestSuitePart part);
-        TestSuite Build();
+        TestSuitePart Build();
     }
 
     public interface ITestSuiteBuilder<in TItem>
     {
         void AddItem(TItem item);
-        TestSuite Build();
+        TestSuitePart Build();
     }
 }

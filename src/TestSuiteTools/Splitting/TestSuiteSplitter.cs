@@ -18,11 +18,11 @@ namespace TestSuiteTools.Splitting
             this.granularityStrategy = granularityStrategy ?? throw new ArgumentNullException(nameof(granularityStrategy));
         }
 
-        public TestSuitePartition Split(TestSuite testSuite, int numParts)
+        public TestSuitePartition Split(TestSuitePart testSuite, int numParts)
         {
             IReadOnlyList<ITestSuitePart> items = this.granularityStrategy.GetItemsFromTestSuite(testSuite);
             List<List<ITestSuitePart>> parts = this.splitStrategy.Split(items, numParts);
-            List<TestSuite> testSuiteParts = new();
+            List<TestSuitePart> testSuiteParts = new();
             foreach (var partItems in parts)
             {
                 ITestSuiteBuilder builder = this.granularityStrategy.CreateBuilder();
