@@ -1,17 +1,27 @@
-﻿namespace TestSuiteTools.Model
+﻿using System;
+
+namespace TestSuiteTools.Model
 {
-    /// <summary>
-    /// An immutable class representing a test method.
-    /// </summary>
-    public class TestMethod : ITestSuitePart
+    public class TestMethod : ITestSuiteGrain
     {
         public string Name { get; }
-        public TestClass Class { get; }
+        public TestClass Class { get; private set; }
 
-        public TestMethod(string name, TestClass testClass)
+        public TestMethod(string name)
         {
             this.Name = name;
-            this.Class = testClass;
+        }
+
+        internal static class Setter
+        {
+            public static void SetParent(TestMethod self, TestClass parent)
+            {
+                if (self.Class != null)
+                {
+                    throw new InvalidOperationException();
+                }
+                self.Class = parent;
+            }
         }
     }
 }

@@ -2,10 +2,7 @@
 
 namespace TestSuiteTools.Model
 {
-    /// <summary>
-    /// An immutable class representing a test class.
-    /// </summary>
-    public class TestClassPart : ITestSuitePart
+    public class TestClassPart : ITestClassPart
     {
         private readonly Dictionary<string, TestMethod> testMethodsByName = new();
 

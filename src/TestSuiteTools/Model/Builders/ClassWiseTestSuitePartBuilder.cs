@@ -5,10 +5,16 @@ using TestSuiteTools.Model.Builders.MutableModel;
 
 namespace TestSuiteTools.Model.Builders
 {
-    public class ClassWiseTestSuiteBuilder : ITestSuiteBuilder<TestClassPart>
+    public class ClassWiseTestSuitePartBuilder : IPartBuilder<TestClassPart>
     {
+        private readonly TestSuite testSuite;
         private readonly MutableTestSuite mutableTestSuite = new();
         private readonly Dictionary<MutableTestClass, TestClassPart> partByClass = new();
+
+        public ClassWiseTestSuitePartBuilder(TestSuite testSuite)
+        {
+            this.testSuite = testSuite;
+        }
 
         public void AddItem(TestClassPart item)
         {
@@ -22,21 +28,26 @@ namespace TestSuiteTools.Model.Builders
             this.partByClass[cl] = item;
         }
 
-        public TestSuitePart Build()
+        public ITestSuitePart Build()
         {
+            if (!this.partByClass.Any())
+            {
+                return new TestSuitePart(this.testSuite, new List<TestAssemblyPart>());
+            }
+
+            var testNamespace = this.partByClass.Values.First().Class.Namespace;
             return new TestSuitePart(
+                this.testSuite,
                 this.mutableTestSuite.Assemblies.Values.Select(
                     a =>
                     {
-                        var asm = new TestAssembly(a.Path);
                         return new TestAssemblyPart(
-                            asm,
+                            testNamespace.Assembly,
                             a.Namespaces.Values.Select(
                                 ns =>
                                 {
-                                    var tns = new TestNamespace(ns.Name, asm);
                                     return new TestNamespacePart(
-                                        tns,
+                                        testNamespace,
                                         ns.Classes.Values.Select(
                                             cl => this.partByClass[cl]).ToList());
                                 }).ToList());

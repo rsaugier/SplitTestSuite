@@ -7,14 +7,14 @@ namespace TestSuiteTools.Splitting.Granularity
 {
     public class AssemblyGranularityStrategy : IGranularityStrategy
     {
-        public IReadOnlyList<ITestSuitePart> GetItemsFromTestSuite(TestSuitePart testSuite)
+        public IReadOnlyList<ITestSuiteGrain> GetItemsFromTestSuite(TestSuite testSuite)
         {
             return testSuite.TestAssemblies.ToList();
         }
 
-        public ITestSuiteBuilder CreateBuilder()
+        public IPartBuilder CreateBuilder(TestSuite testSuite)
         {
-            return new TestSuiteBuilderAdapter<TestAssemblyPart>(new AssemblyWiseTestSuiteBuilder());
+            return new PartBuilderAdapter<TestAssemblyPart>(new AssemblyWiseTestSuitePartBuilder(testSuite));
         }
     }
 }

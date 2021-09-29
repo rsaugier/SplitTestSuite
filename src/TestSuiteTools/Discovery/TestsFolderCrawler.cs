@@ -16,7 +16,7 @@ namespace TestSuiteTools.Discovery
             this._log = log;
         }
 
-        public void BuildTestSuite(MethodWiseTestSuiteBuilder suiteBuilder)
+        public void BuildTestSuite(TestSuiteBuilder suiteBuilder)
         {
             this._log.Info($"Finding all test assemblies in this folder: {this.folderPath}");
             var assemblyPaths = Enumerable.Union(

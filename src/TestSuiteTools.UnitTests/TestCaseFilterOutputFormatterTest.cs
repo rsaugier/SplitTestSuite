@@ -8,9 +8,9 @@ namespace TestSuiteTools.UnitTests
 {
     public class TestCaseFilterOutputFormatterTest
     {
-        TestSuitePart CreateTestSuite()
+        TestSuite CreateTestSuite()
         {
-            var builder = new MethodWiseTestSuiteBuilder();
+            var builder = new TestSuiteBuilder();
             builder.AddTestMethod("foo.dll", "MyNamespace", "MyClassA", "MyMethod1");
             builder.AddTestMethod("foo.dll", "MyNamespace", "MyClassA", "MyMethod2");
             builder.AddTestMethod("bar.dll", "MyNamespace", "MyClassB", "MyMethod1");
@@ -21,7 +21,7 @@ namespace TestSuiteTools.UnitTests
         void OutputTestSuiteToTestFilterFormat()
         {
             // setup
-            TestSuitePart suite = CreateTestSuite();
+            ITestSuitePart suite = CreateTestSuite();
             var formatter = CreateFormatter();
 
             // act
@@ -34,7 +34,7 @@ namespace TestSuiteTools.UnitTests
             Assert.Equal(expected, contents);
         }
 
-        private static string FormatSuiteToString(IOutputFormatter? formatter, TestSuitePart suite)
+        private static string FormatSuiteToString(IOutputFormatter? formatter, ITestSuitePart suite)
         {
             var stream = new MemoryStream();
             formatter.Output(suite, stream);

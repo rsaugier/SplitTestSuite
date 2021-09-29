@@ -1,6 +1,9 @@
+﻿using System.Collections.Generic;
+
 namespace TestSuiteTools.Model
 {
-    public interface ITestSuitePart
+    public class ITestSuitePart : ITestSuiteGrain
     {
+        public IReadOnlyCollection<ITestAssemblyPart> TestAssemblies { get; }
     }
 }

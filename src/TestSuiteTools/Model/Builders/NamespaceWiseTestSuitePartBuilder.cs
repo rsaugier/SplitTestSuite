@@ -5,10 +5,16 @@ using TestSuiteTools.Model.Builders.MutableModel;
 
 namespace TestSuiteTools.Model.Builders
 {
-    public class NamespaceWiseTestSuiteBuilder : ITestSuiteBuilder<TestNamespacePart>
+    public class NamespaceWiseTestSuitePartBuilder : IPartBuilder<TestNamespacePart>
     {
+        private readonly TestSuite testSuite;
         private readonly MutableTestSuite mutableTestSuite = new();
         private readonly Dictionary<MutableTestNamespace, TestNamespacePart> partByNamespace = new();
+
+        public NamespaceWiseTestSuitePartBuilder(TestSuite testSuite)
+        {
+            this.testSuite = testSuite;
+        }
 
         public void AddItem(TestNamespacePart item)
         {
@@ -21,15 +27,21 @@ namespace TestSuiteTools.Model.Builders
             this.partByNamespace[ns] = item;
         }
 
-        public TestSuitePart Build()
+        public ITestSuitePart Build()
         {
+            if (!this.partByNamespace.Any())
+            {
+                return new TestSuitePart(this.testSuite, new List<TestAssemblyPart>());
+            }
+
+            var testAssembly = this.partByNamespace.Values.First().Namespace.Assembly;
             return new TestSuitePart(
+                this.testSuite,
                 this.mutableTestSuite.Assemblies.Values.Select(
                     a =>
                     {
-                        var asm = new TestAssembly(a.Path);
                         return new TestAssemblyPart(
-                            asm,
+                            testAssembly,
                             a.Namespaces.Values.Select(ns => this.partByNamespace[ns]).ToList());
                     }).ToList());
         }

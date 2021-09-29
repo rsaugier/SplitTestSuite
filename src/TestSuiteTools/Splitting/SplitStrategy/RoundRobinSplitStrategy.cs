@@ -6,12 +6,12 @@ namespace TestSuiteTools.Splitting.SplitStrategy
 {
     public class RoundRobinSplitStrategy : ISplitStrategy
     {
-        public List<List<ITestSuitePart>> Split(IReadOnlyCollection<ITestSuitePart> items, int numParts)
+        public List<List<ITestSuiteGrain>> Split(IReadOnlyCollection<ITestSuiteGrain> items, int numParts)
         {
-            var parts = new List<ITestSuitePart>[numParts];
+            var parts = new List<ITestSuiteGrain>[numParts];
             for (int i = 0; i < numParts; ++i)
             {
-                parts[i] = new List<ITestSuitePart>();
+                parts[i] = new List<ITestSuiteGrain>();
             }
 
             int itemIndex = 0;

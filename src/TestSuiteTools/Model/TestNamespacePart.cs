@@ -2,17 +2,13 @@
 
 namespace TestSuiteTools.Model
 {
-    /// <summary>
-    /// An immutable class representing a test namespace.
-    /// (ie a namespace within a test assembly).
-    /// </summary>
-    public class TestNamespacePart : ITestSuitePart
+    public class TestNamespacePart : ITestNamespacePart
     {
         private readonly Dictionary<string, TestClassPart> testClassesByName = new();
 
         public TestNamespace Namespace { get; }
         public string Name => Namespace.Name;
-        public IReadOnlyCollection<TestClassPart> TestClasses => this.testClassesByName.Values;
+        public IReadOnlyCollection<ITestClassPart> TestClasses => this.testClassesByName.Values;
 
         public TestNamespacePart(TestNamespace testNamespace, IReadOnlyCollection<TestClassPart> methodLists)
         {

@@ -5,7 +5,7 @@ namespace TestSuiteTools.OutputFormats
 {
     public class PlainTextOutputFormatter : IOutputFormatter
     {
-        public void Output(TestSuitePart testSuitePart, Stream outputStream)
+        public void Output(ITestSuitePart testSuitePart, Stream outputStream)
         {
             using (var writer = new StreamWriter(outputStream))
             {

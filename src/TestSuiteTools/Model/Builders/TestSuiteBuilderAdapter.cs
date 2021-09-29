@@ -2,17 +2,17 @@
 
 namespace TestSuiteTools.Model.Builders
 {
-    public class TestSuiteBuilderAdapter<TItem> : ITestSuiteBuilder
+    public class PartBuilderAdapter<TItem> : IPartBuilder
         where TItem : class
     {
-        private readonly ITestSuiteBuilder<TItem> adapted;
+        private readonly IPartBuilder<TItem> adapted;
 
-        public TestSuiteBuilderAdapter(ITestSuiteBuilder<TItem> adapted)
+        public PartBuilderAdapter(IPartBuilder<TItem> adapted)
         {
             this.adapted = adapted;
         }
 
-        public void AddItem(ITestSuitePart part)
+        public void AddItem(ITestSuiteGrain part)
         {
             if (!(part is TItem concreteItem))
             {
@@ -22,7 +22,7 @@ namespace TestSuiteTools.Model.Builders
             this.adapted.AddItem(concreteItem);
         }
 
-        public TestSuitePart Build()
+        public ITestSuitePart Build()
         {
             return this.adapted.Build();
         }

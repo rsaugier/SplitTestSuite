@@ -15,7 +15,7 @@ namespace TestSuiteTools.Discovery
             this._log = log;
         }
 
-        public bool BuildTestSuite(MethodWiseTestSuiteBuilder suiteBuilder)
+        public bool BuildTestSuite(TestSuiteBuilder suiteBuilder)
         {
             this._log.Info($"Loading assembly {this.assemblyPath} to search for tests");
             Assembly assembly = Assembly.LoadFrom(this.assemblyPath);

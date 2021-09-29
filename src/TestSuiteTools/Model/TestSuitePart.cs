@@ -2,22 +2,16 @@
 
 namespace TestSuiteTools.Model
 {
-    /// <summary>
-    /// Immutable test suite.
-    /// </summary>
-    /// <remarks>
-    /// A test suite, in our context, means a list of test methods, grouped by assemblies and classes.
-    /// The important point is that it can be a selection of a set of tests within a physical test suite,
-    /// and thus can represent a sub-part of such a suite.
-    /// </remarks>
-    public class TestSuitePart
+    public class TestSuitePart : ITestSuitePart
     {
         private readonly Dictionary<string, TestAssemblyPart> testAssemblies = new();
 
+        public TestSuite TestSuite { get; }
         public IReadOnlyCollection<TestAssemblyPart> TestAssemblies => this.testAssemblies.Values;
 
-        public TestSuitePart(IReadOnlyCollection<TestAssemblyPart> testNamespaceLists)
+        public TestSuitePart(TestSuite testSuite, IReadOnlyCollection<TestAssemblyPart> testNamespaceLists)
         {
+            TestSuite = testSuite;
             foreach (var testNamespaceList in testNamespaceLists)
             {
                 this.testAssemblies.Add(testNamespaceList.Assembly.Path, testNamespaceList);

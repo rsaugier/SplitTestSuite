@@ -173,9 +173,9 @@ namespace SplitTestSuite
 
         private FileStream OpenFile(string filePath) => new(filePath, FileMode.Create);
 
-        private TestSuitePart ReadTestSuite(string testSuitePath)
+        private TestSuite ReadTestSuite(string testSuitePath)
         {
-            MethodWiseTestSuiteBuilder suiteBuilder = new MethodWiseTestSuiteBuilder();
+            TestSuiteBuilder suiteBuilder = new TestSuiteBuilder();
             if (Directory.Exists(testSuitePath))
             {
                 var crawler = new TestsFolderCrawler(testSuitePath, this._log);

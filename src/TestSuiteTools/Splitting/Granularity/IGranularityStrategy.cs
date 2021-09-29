@@ -6,7 +6,7 @@ namespace TestSuiteTools.Splitting.Granularity
 {
     public interface IGranularityStrategy
     {
-        IReadOnlyList<ITestSuitePart> GetItemsFromTestSuite(TestSuitePart testSuite);
-        ITestSuiteBuilder CreateBuilder();
+        IReadOnlyList<ITestSuiteGrain> GetItemsFromTestSuite(TestSuite testSuite);
+        IPartBuilder CreateBuilder(TestSuite testSuite);
     }
 }
