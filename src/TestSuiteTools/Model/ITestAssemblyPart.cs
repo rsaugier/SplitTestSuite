@@ -7,5 +7,6 @@ namespace TestSuiteTools.Model
         public IReadOnlyCollection<ITestNamespacePart> TestNamespaces { get; }
         public string Path { get; }
         public bool IsWhole { get; }
+        public TestAssembly Whole { get; }
     }
 }

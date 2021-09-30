@@ -15,7 +15,7 @@ namespace SplitTestSuite
     enum OutputFormat
     {
         PlainTextTestList,
-        OrderedTest
+        TestCaseFilter
     }
 
     enum Granularity
@@ -195,8 +195,8 @@ namespace SplitTestSuite
             {
                 case OutputFormat.PlainTextTestList:
                     return new PlainTextOutputFormatter();
-                case OutputFormat.OrderedTest:
-                    throw new NotImplementedException();
+                case OutputFormat.TestCaseFilter:
+                    return new TestCaseFilterOutputFormatter();
                 default:
                     throw new ArgumentOutOfRangeException();
             }

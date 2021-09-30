@@ -5,21 +5,21 @@ using TestSuiteTools.Model.Builders.MutableModel;
 
 namespace TestSuiteTools.Model.Builders
 {
-    public class NamespaceWiseTestSuitePartBuilder : IPartBuilder<TestNamespacePart>
+    public class NamespaceWiseTestSuitePartBuilder : IPartBuilder<ITestNamespacePart>
     {
         private readonly TestSuite testSuite;
         private readonly MutableTestSuite mutableTestSuite = new();
-        private readonly Dictionary<MutableTestNamespace, TestNamespacePart> partByNamespace = new();
+        private readonly Dictionary<MutableTestNamespace, ITestNamespacePart> partByNamespace = new();
 
         public NamespaceWiseTestSuitePartBuilder(TestSuite testSuite)
         {
             this.testSuite = testSuite;
         }
 
-        public void AddItem(TestNamespacePart item)
+        public void AddItem(ITestNamespacePart item)
         {
-            MutableTestAssembly assembly = this.mutableTestSuite.GetOrAddAssembly(item.Namespace.Assembly.Path);
-            MutableTestNamespace ns = assembly.GetOrAddNamespace(item.Namespace.Name);
+            MutableTestAssembly assembly = this.mutableTestSuite.GetOrAddAssembly(item.Whole.Assembly.Path);
+            MutableTestNamespace ns = assembly.GetOrAddNamespace(item.Whole.Name);
             if (this.partByNamespace.ContainsKey(ns))
             {
                 throw new InvalidOperationException($"Namespace {ns.Name} was already added");
@@ -34,12 +34,12 @@ namespace TestSuiteTools.Model.Builders
                 return new TestSuitePart(this.testSuite, new List<TestAssemblyPart>());
             }
 
-            var testAssembly = this.partByNamespace.Values.First().Namespace.Assembly;
             return new TestSuitePart(
                 this.testSuite,
                 this.mutableTestSuite.Assemblies.Values.Select(
                     a =>
                     {
+                        var testAssembly = this.testSuite.TestAssembliesByPath[a.Path];
                         return new TestAssemblyPart(
                             testAssembly,
                             a.Namespaces.Values.Select(ns => this.partByNamespace[ns]).ToList());

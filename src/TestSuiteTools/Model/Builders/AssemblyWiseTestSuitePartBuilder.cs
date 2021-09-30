@@ -4,9 +4,9 @@ using System.Linq;
 
 namespace TestSuiteTools.Model.Builders
 {
-    public class AssemblyWiseTestSuitePartBuilder : IPartBuilder<TestAssemblyPart>
+    public class AssemblyWiseTestSuitePartBuilder : IPartBuilder<ITestAssemblyPart>
     {
-        private readonly Dictionary<string, TestAssemblyPart> assembliesByPath = new();
+        private readonly Dictionary<string, ITestAssemblyPart> assembliesByPath = new();
         private readonly TestSuite testSuite;
 
         public AssemblyWiseTestSuitePartBuilder(TestSuite testSuite)
@@ -14,14 +14,14 @@ namespace TestSuiteTools.Model.Builders
             this.testSuite = testSuite;
         }
 
-        public void AddItem(TestAssemblyPart assembly)
+        public void AddItem(ITestAssemblyPart assembly)
         {
-            if (this.assembliesByPath.ContainsKey(assembly.Assembly.Path))
+            if (this.assembliesByPath.ContainsKey(assembly.Path))
             {
-                throw new InvalidOperationException($"Assembly {assembly.Assembly.Path} was already added");
+                throw new InvalidOperationException($"Assembly {assembly.Path} was already added");
             }
 
-            this.assembliesByPath.Add(assembly.Assembly.Path, assembly);
+            this.assembliesByPath.Add(assembly.Path, assembly);
         }
 
         public ITestSuitePart Build()
@@ -32,7 +32,7 @@ namespace TestSuiteTools.Model.Builders
             }
 
             return new TestSuitePart(
-                this.assembliesByPath.Values.First().Assembly.Suite,
+                this.testSuite,
                 this.assembliesByPath.Values);
         }
     }

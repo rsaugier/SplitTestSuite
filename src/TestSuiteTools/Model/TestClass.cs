@@ -8,10 +8,12 @@ namespace TestSuiteTools.Model
         private readonly Dictionary<string, TestMethod> testMethodsByName = new();
 
         public string Name { get; }
-        public string QualifiedName => $"{Namespace.Name}.{Name}";
-        public TestNamespace Namespace { get; private set; }
+        public string QualifiedName => $"{TestNamespace.Name}.{Name}";
+        public TestNamespace TestNamespace { get; private set; }
         public IReadOnlyCollection<TestMethod> TestMethods => this.testMethodsByName.Values;
+        public IReadOnlyDictionary<string, TestMethod> TestMethodsByName => this.testMethodsByName;
         public bool IsWhole => true;
+        public TestClass Whole => this;
 
         public TestClass(string name, IReadOnlyCollection<TestMethod> testMethods)
         {
@@ -26,11 +28,11 @@ namespace TestSuiteTools.Model
         {
             public static void SetParent(TestClass self, TestNamespace parent)
             {
-                if (self.Namespace != null)
+                if (self.TestNamespace != null)
                 {
                     throw new InvalidOperationException();
                 }
-                self.Namespace = parent;
+                self.TestNamespace = parent;
             }
         }
     }

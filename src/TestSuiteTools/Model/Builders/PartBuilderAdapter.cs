@@ -2,21 +2,21 @@
 
 namespace TestSuiteTools.Model.Builders
 {
-    public class PartBuilderAdapter<TItem> : IPartBuilder
-        where TItem : class
+    public class PartBuilderAdapter<TGrain> : IPartBuilder
+        where TGrain : ITestSuiteGrain
     {
-        private readonly IPartBuilder<TItem> adapted;
+        private readonly IPartBuilder<TGrain> adapted;
 
-        public PartBuilderAdapter(IPartBuilder<TItem> adapted)
+        public PartBuilderAdapter(IPartBuilder<TGrain> adapted)
         {
             this.adapted = adapted;
         }
 
         public void AddItem(ITestSuiteGrain part)
         {
-            if (!(part is TItem concreteItem))
+            if (!(part is TGrain concreteItem))
             {
-                throw new InvalidOperationException($"expected {nameof(TItem)}");
+                throw new InvalidOperationException($"expected {typeof(TGrain).Name}");
             }
 
             this.adapted.AddItem(concreteItem);

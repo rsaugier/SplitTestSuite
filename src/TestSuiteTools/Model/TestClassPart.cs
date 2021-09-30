@@ -9,9 +9,10 @@ namespace TestSuiteTools.Model
 
         public TestClass Class { get; }
         public string Name => Class.Name;
-        public string QualifiedName => $"{Class.Namespace.Name}.{Name}";
+        public string QualifiedName => $"{Class.TestNamespace.Name}.{Name}";
         public IReadOnlyCollection<TestMethod> TestMethods => this.testMethodsByName.Values;
         public bool IsWhole { get; }
+        public TestClass Whole => Class;
 
         public TestClassPart(TestClass testClass, IReadOnlyCollection<TestMethod> testMethods)
         {

@@ -14,7 +14,7 @@ namespace TestSuiteTools.Splitting.Granularity
 
         public IPartBuilder CreateBuilder(TestSuite testSuite)
         {
-            return new PartBuilderAdapter<TestAssemblyPart>(new AssemblyWiseTestSuitePartBuilder(testSuite));
+            return new PartBuilderAdapter<ITestAssemblyPart>(new AssemblyWiseTestSuitePartBuilder(testSuite));
         }
     }
 }

@@ -15,15 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="TestSuiteTools\Discovery" />
-    <Folder Include="TestSuiteTools\Model\Builders" />
-    <Folder Include="TestSuiteTools\Model\Mutable" />
-    <Folder Include="TestSuiteTools\OutputFormats" />
-    <Folder Include="TestSuiteTools\Splitting\Granularity" />
-    <Folder Include="TestSuiteTools\Splitting\SplitStrategy" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\TestSuiteTools\TestSuiteTools.csproj" />
   </ItemGroup>
 

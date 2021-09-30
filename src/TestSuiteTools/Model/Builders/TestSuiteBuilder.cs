@@ -23,8 +23,8 @@ namespace TestSuiteTools.Model.Builders
 
         public void AddItem(TestMethod method)
         {
-            this.AddTestMethod(method.Class.Namespace.Assembly.Path,
-                method.Class.Namespace.Name,
+            this.AddTestMethod(method.Class.TestNamespace.Assembly.Path,
+                method.Class.TestNamespace.Name,
                 method.Class.Name,
                 method.Name);
         }

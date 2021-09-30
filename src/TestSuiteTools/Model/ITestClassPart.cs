@@ -8,5 +8,6 @@ namespace TestSuiteTools.Model
         public string Name { get; }
         public string QualifiedName { get; }
         public bool IsWhole { get; }
+        public TestClass Whole { get; }
     }
 }

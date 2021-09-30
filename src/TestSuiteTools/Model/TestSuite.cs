@@ -7,7 +7,9 @@ namespace TestSuiteTools.Model
         private readonly Dictionary<string, TestAssembly> testAssemblies = new();
 
         public IReadOnlyCollection<TestAssembly> TestAssemblies => this.testAssemblies.Values;
+        public IReadOnlyDictionary<string, TestAssembly> TestAssembliesByPath => this.testAssemblies;
         IReadOnlyCollection<ITestAssemblyPart> ITestSuitePart.TestAssemblies => this.testAssemblies.Values;
+        public TestSuite Whole => this;
 
         public TestSuite(IReadOnlyCollection<TestAssembly> testAssemblies)
         {

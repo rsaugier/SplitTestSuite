@@ -33,7 +33,7 @@ namespace TestSuiteTools.UnitTests
             Assert.Equal(expected, contents);
         }
 
-        private static string FormatSuiteToString(IOutputFormatter? formatter, ITestSuitePart suite)
+        private static string FormatSuiteToString(IOutputFormatter formatter, ITestSuitePart suite)
         {
             using (var stream = new MemoryStream())
             {

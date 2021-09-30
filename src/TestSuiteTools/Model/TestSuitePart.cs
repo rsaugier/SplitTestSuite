@@ -4,17 +4,18 @@ namespace TestSuiteTools.Model
 {
     public class TestSuitePart : ITestSuitePart
     {
-        private readonly Dictionary<string, TestAssemblyPart> testAssemblies = new();
+        private readonly Dictionary<string, ITestAssemblyPart> testAssemblies = new();
 
         public TestSuite TestSuite { get; }
         public IReadOnlyCollection<ITestAssemblyPart> TestAssemblies => this.testAssemblies.Values;
+        public TestSuite Whole => TestSuite;
 
-        public TestSuitePart(TestSuite testSuite, IReadOnlyCollection<TestAssemblyPart> testNamespaceLists)
+        public TestSuitePart(TestSuite testSuite, IReadOnlyCollection<ITestAssemblyPart> testAssemblyParts)
         {
             TestSuite = testSuite;
-            foreach (var testNamespaceList in testNamespaceLists)
+            foreach (var testAssemblyPart in testAssemblyParts)
             {
-                this.testAssemblies.Add(testNamespaceList.Assembly.Path, testNamespaceList);
+                this.testAssemblies.Add(testAssemblyPart.Whole.Path, testAssemblyPart);
             }
         }
     }
