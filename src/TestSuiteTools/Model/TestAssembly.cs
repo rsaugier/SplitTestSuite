@@ -9,7 +9,9 @@ namespace TestSuiteTools.Model
 
         public string Path { get; }
         public TestSuite Suite { get; private set; }
-        public IReadOnlyCollection<ITestNamespacePart> TestNamespaces => this.namespacesByName.Values;
+        public IReadOnlyCollection<TestNamespace> TestNamespaces => this.namespacesByName.Values;
+        IReadOnlyCollection<ITestNamespacePart> ITestAssemblyPart.TestNamespaces => this.namespacesByName.Values;
+        public bool IsWhole => true;
 
         public TestAssembly(string path, IReadOnlyCollection<TestNamespace> testNamespaces)
         {

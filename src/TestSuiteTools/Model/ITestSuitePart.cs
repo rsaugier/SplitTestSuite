@@ -2,7 +2,7 @@
 
 namespace TestSuiteTools.Model
 {
-    public class ITestSuitePart : ITestSuiteGrain
+    public interface ITestSuitePart : ITestSuiteGrain
     {
         public IReadOnlyCollection<ITestAssemblyPart> TestAssemblies { get; }
     }

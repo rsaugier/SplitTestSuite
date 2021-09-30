@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace TestSuiteTools.Model
 {
@@ -9,6 +10,7 @@ namespace TestSuiteTools.Model
         public TestNamespace Namespace { get; }
         public string Name => Namespace.Name;
         public IReadOnlyCollection<ITestClassPart> TestClasses => this.testClassesByName.Values;
+        public bool IsWhole { get; }
 
         public TestNamespacePart(TestNamespace testNamespace, IReadOnlyCollection<TestClassPart> methodLists)
         {
@@ -17,6 +19,8 @@ namespace TestSuiteTools.Model
             {
                 this.testClassesByName.Add(methodList.Class.Name, methodList);
             }
+
+            IsWhole = Namespace.TestClasses.All(ns => this.testClassesByName.ContainsKey(ns.Name));
         }
     }
 }

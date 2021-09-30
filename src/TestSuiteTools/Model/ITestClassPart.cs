@@ -6,5 +6,7 @@ namespace TestSuiteTools.Model
     {
         public IReadOnlyCollection<TestMethod> TestMethods { get ; }
         public string Name { get; }
+        public string QualifiedName { get; }
+        public bool IsWhole { get; }
     }
 }

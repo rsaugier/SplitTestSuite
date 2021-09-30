@@ -9,7 +9,9 @@ namespace TestSuiteTools.Model
 
         public string Name { get; }
         public TestAssembly Assembly { get; private set; }
-        public IReadOnlyCollection<ITestClassPart> TestClasses => this.testClassesByName.Values;
+        public IReadOnlyCollection<TestClass> TestClasses => this.testClassesByName.Values;
+        IReadOnlyCollection<ITestClassPart> ITestNamespacePart.TestClasses => this.testClassesByName.Values;
+        public bool IsWhole => true;
 
         internal static class Setter
         {

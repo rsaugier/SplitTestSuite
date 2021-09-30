@@ -28,25 +28,26 @@ namespace TestSuiteTools.UnitTests
             var contents = FormatSuiteToString(formatter, suite);
 
             // assert
-            string expected = "FullyQualifiedName=MyNamespace.MyClassA.MyMethod1|" +
-                              "FullyQualifiedName=MyNamespace.MyClassA.MyMethod2|" +
-                              "FullyQualifiedName=MyNamespace.MyClassB.MyMethod1";
+            string expected = "ClassName=MyNamespace.MyClassA|" +
+                              "ClassName=MyNamespace.MyClassB";
             Assert.Equal(expected, contents);
         }
 
         private static string FormatSuiteToString(IOutputFormatter? formatter, ITestSuitePart suite)
         {
-            var stream = new MemoryStream();
-            formatter.Output(suite, stream);
-            stream.Seek(0, SeekOrigin.Begin);
-            var reader = new StreamReader(stream);
-            string contents = reader.ReadToEnd();
-            return contents;
+            using (var stream = new MemoryStream())
+            {
+                formatter.Output(suite, stream);
+                stream.Seek(0, SeekOrigin.Begin);
+                var reader = new StreamReader(stream);
+                string contents = reader.ReadToEnd();
+                return contents;
+            }
         }
 
         private IOutputFormatter CreateFormatter()
         {
-            throw new System.NotImplementedException();
+            return new TestCaseFilterOutputFormatter();
         }
     }
 }

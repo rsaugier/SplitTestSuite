@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace TestSuiteTools.Model
 {
@@ -8,7 +9,9 @@ namespace TestSuiteTools.Model
 
         public TestClass Class { get; }
         public string Name => Class.Name;
+        public string QualifiedName => $"{Class.Namespace.Name}.{Name}";
         public IReadOnlyCollection<TestMethod> TestMethods => this.testMethodsByName.Values;
+        public bool IsWhole { get; }
 
         public TestClassPart(TestClass testClass, IReadOnlyCollection<TestMethod> testMethods)
         {
@@ -17,6 +20,7 @@ namespace TestSuiteTools.Model
             {
                 this.testMethodsByName.Add(testMethod.Name, testMethod);
             }
+            IsWhole = Class.TestMethods.All(ns => this.testMethodsByName.ContainsKey(ns.Name));
         }
     }
 }

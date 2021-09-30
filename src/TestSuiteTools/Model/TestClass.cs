@@ -8,8 +8,10 @@ namespace TestSuiteTools.Model
         private readonly Dictionary<string, TestMethod> testMethodsByName = new();
 
         public string Name { get; }
+        public string QualifiedName => $"{Namespace.Name}.{Name}";
         public TestNamespace Namespace { get; private set; }
         public IReadOnlyCollection<TestMethod> TestMethods => this.testMethodsByName.Values;
+        public bool IsWhole => true;
 
         public TestClass(string name, IReadOnlyCollection<TestMethod> testMethods)
         {
