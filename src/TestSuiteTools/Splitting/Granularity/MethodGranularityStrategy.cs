@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using TestSuiteTools.Model;
 using TestSuiteTools.Model.Builders;
@@ -17,8 +16,7 @@ namespace TestSuiteTools.Splitting.Granularity
 
         public IPartBuilder CreateBuilder(TestSuite testSuite)
         {
-            throw new NotImplementedException();
-            //return new PartBuilderAdapter<TestMethod>(new TestSuiteBuilder());
+            return new PartBuilderAdapter<TestMethod>(new TestSuiteBuilder());
         }
     }
 }

@@ -5,7 +5,7 @@ using TestSuiteTools.Model.Builders.MutableModel;
 
 namespace TestSuiteTools.Model.Builders
 {
-    public class TestSuiteBuilder
+    public class TestSuiteBuilder : IPartBuilder<TestMethod>
     {
         private readonly MutableTestSuite mutableTestSuite = new();
 
@@ -19,6 +19,19 @@ namespace TestSuiteTools.Model.Builders
             {
                 throw new InvalidOperationException($"Test method '{@namespace}.{testClassName}.{testMethodName}' has already been added (from assembly {assemblyPath})");
             }
+        }
+
+        public void AddItem(TestMethod method)
+        {
+            this.AddTestMethod(method.Class.Namespace.Assembly.Path,
+                method.Class.Namespace.Name,
+                method.Class.Name,
+                method.Name);
+        }
+
+        ITestSuitePart IPartBuilder<TestMethod>.Build()
+        {
+            return Build();
         }
 
         public TestSuite Build()
