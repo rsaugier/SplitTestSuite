@@ -8,12 +8,12 @@ namespace TestSuiteTools.OutputFormats
         public void Output(ITestSuitePart testSuitePart, Stream outputStream)
         {
             var writer = new StreamWriter(outputStream);
-            foreach (TestAssemblyPart testAssembly in testSuitePart.TestAssemblies)
+            foreach (ITestAssemblyPart testAssembly in testSuitePart.TestAssemblies)
             {
                 writer.WriteLine(testAssembly.Path);
-                foreach (TestNamespacePart ns in testAssembly.TestNamespaces)
+                foreach (ITestNamespacePart ns in testAssembly.TestNamespaces)
                 {
-                    foreach (TestClassPart testClass in ns.TestClasses)
+                    foreach (ITestClassPart testClass in ns.TestClasses)
                     {
                         writer.WriteLine($"  {ns.Name}.{testClass.Name}");
                         foreach (TestMethod method in testClass.TestMethods)

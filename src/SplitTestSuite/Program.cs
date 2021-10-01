@@ -12,12 +12,6 @@ using TestSuiteTools.Splitting.SplitStrategy;
 
 namespace SplitTestSuite
 {
-    enum OutputFormat
-    {
-        PlainTextTestList,
-        TestCaseFilter
-    }
-
     enum Granularity
     {
         Method,
@@ -32,17 +26,17 @@ namespace SplitTestSuite
             string testSuitePath,
             int numParts,
             int? part,
-            string outputPath,
             bool quiet,
-            OutputFormat outputFormat,
+            string? outTestCaseFilter,
+            string? outPlainText,
             Granularity granularity)
         {
             this.TestSuitePath = testSuitePath;
             this.NumParts = numParts;
             this.Part = part;
-            this.OutputPath = outputPath;
             this.Quiet = quiet;
-            this.OutputFormat = outputFormat;
+            this.OutTestCaseFilter = outTestCaseFilter;
+            this.OutPlainText = outPlainText;
             this.Granularity = granularity;
         }
 
@@ -62,24 +56,22 @@ namespace SplitTestSuite
             HelpText = "A part index (between 0 and num-parts-1). If specified, only the specified part is output.")]
         public int? Part { get; }
 
-        [Option(
-            'o',
-            "output",
-            Required = true,
-            HelpText = "Path to the output file."
-                + " If multiple parts are output, the output file name will be suffixed with a dot and the part number,"
-                + " just before its extension.")]
-        public string OutputPath { get; }
-
         [Option('q', "quiet", Required = false, HelpText = "Don't output anything.")]
         public bool Quiet { get; }
 
-        [Option(
-            'f',
-            "format",
+        [Option("out-filter",
             Required = false,
-            HelpText = "The output file format. If not specified, will be deduced from output file extension.")]
-        public OutputFormat OutputFormat { get; }
+            HelpText = "Output as TestCaseFilter",
+            MetaValue = "FILENAME",
+            Group = "output-formats")]
+        public string? OutTestCaseFilter { get; }
+
+        [Option("out-plain",
+            Required = false,
+            HelpText = "Output as plain text list",
+            MetaValue = "FILENAME",
+            Group = "output-formats")]
+        public string? OutPlainText { get; }
 
         [Option(
             'g',
@@ -114,9 +106,9 @@ namespace SplitTestSuite
         {
             this._log.Info(
                 $"Input tests path: {this.parameters.TestSuitePath}",
-                $"Output file: {this.parameters.OutputPath}",
-                $"Output format: {this.parameters.OutputFormat}",
-                $"Number of parts: {this.parameters.NumParts}");
+                $"Number of parts: {this.parameters.NumParts}",
+                $"Wanted part: {this.parameters.Part}," +
+                $"Quiet: {this.parameters.Quiet}");
         }
 
         void Run()
@@ -130,13 +122,32 @@ namespace SplitTestSuite
             TestSuiteSplitter splitter = this.CreateTestSuiteSplitter();
             TestSuitePartition testSuitePartition = splitter.Split(testSuite, this.parameters.NumParts);
 
-            var outputFormatter = this.CreateOutputFormatter();
+            string? plainTextOutputFile = this.parameters.OutPlainText;
+            if (plainTextOutputFile != null)
+            {
+                this.WriteOutput(testSuitePartition, new PlainTextOutputFormatter(), plainTextOutputFile, "txt");
+            }
+
+            string? testCaseFilterOutputFile = this.parameters.OutTestCaseFilter;
+            if (testCaseFilterOutputFile != null)
+            {
+                this.WriteOutput(testSuitePartition, new TestCaseFilterOutputFormatter(), testCaseFilterOutputFile, "testcasefilter.txt");
+            }
+        }
+
+        private void WriteOutput(TestSuitePartition testSuitePartition, IOutputFormatter formatter, string? path, string extension)
+        {
+            if (!Path.HasExtension(path))
+            {
+                path += "." + extension;
+            }
+
             if (this.parameters.Part.HasValue)
             {
-                this._log.Info($"Writing part {this.parameters.Part.Value} to {this.parameters.OutputPath}");
-                using (var outputStream = this.OpenFile(this.parameters.OutputPath))
+                this._log.Info($"Writing part {this.parameters.Part.Value} to {path}");
+                using (var outputStream = this.OpenFile(path))
                 {
-                    outputFormatter.Output(
+                    formatter.Output(
                         testSuitePartition.Parts[this.parameters.Part.Value],
                         outputStream);
                     outputStream.Close();
@@ -146,11 +157,11 @@ namespace SplitTestSuite
             {
                 for (int part = 0; part < this.parameters.NumParts; ++part)
                 {
-                    string partOutputPath = this.SuffixOutputFilePath(this.parameters.OutputPath, part);
+                    string partOutputPath = this.SuffixOutputFilePath(path, part);
                     this._log.Info($"Writing part {part} to {partOutputPath}");
                     using (var outputStream = this.OpenFile(partOutputPath))
                     {
-                        outputFormatter.Output(
+                        formatter.Output(
                             testSuitePartition.Parts[part],
                             outputStream);
                         outputStream.Close();
@@ -187,19 +198,6 @@ namespace SplitTestSuite
                 reader.BuildTestSuite(suiteBuilder);
             }
             return suiteBuilder.Build();
-        }
-
-        private IOutputFormatter CreateOutputFormatter()
-        {
-            switch (this.parameters.OutputFormat)
-            {
-                case OutputFormat.PlainTextTestList:
-                    return new PlainTextOutputFormatter();
-                case OutputFormat.TestCaseFilter:
-                    return new TestCaseFilterOutputFormatter();
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
         }
 
         private IGranularityStrategy CreateGranularityStrategy()
