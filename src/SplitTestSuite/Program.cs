@@ -83,6 +83,8 @@ namespace SplitTestSuite
 
     class Program
     {
+        private const string PlainTextOutputFileExtension = "txt";
+        private const string TestCaseFilterOutputFileExtension = "testcasefilter.txt";
         private readonly ProgramParams parameters;
         private readonly ILog _log;
 
@@ -102,37 +104,13 @@ namespace SplitTestSuite
                 });
         }
 
-        void SayOptions()
+        void LogOptions()
         {
             this._log.Info(
                 $"Input tests path: {this.parameters.TestSuitePath}",
                 $"Number of parts: {this.parameters.NumParts}",
                 $"Wanted part: {this.parameters.Part}," +
                 $"Quiet: {this.parameters.Quiet}");
-        }
-
-        void Run()
-        {
-            this.SayOptions();
-
-            this._log.Info($"Discovering tests from {this.parameters.TestSuitePath}");
-            var testSuite = this.ReadTestSuite(this.parameters.TestSuitePath);
-
-            this._log.Info($"Splitting tests in {this.parameters.NumParts} parts");
-            TestSuiteSplitter splitter = this.CreateTestSuiteSplitter();
-            TestSuitePartition testSuitePartition = splitter.Split(testSuite, this.parameters.NumParts);
-
-            string? plainTextOutputFile = this.parameters.OutPlainText;
-            if (plainTextOutputFile != null)
-            {
-                this.WriteOutput(testSuitePartition, new PlainTextOutputFormatter(), plainTextOutputFile, "txt");
-            }
-
-            string? testCaseFilterOutputFile = this.parameters.OutTestCaseFilter;
-            if (testCaseFilterOutputFile != null)
-            {
-                this.WriteOutput(testSuitePartition, new TestCaseFilterOutputFormatter(), testCaseFilterOutputFile, "testcasefilter.txt");
-            }
         }
 
         private void WriteOutput(TestSuitePartition testSuitePartition, IOutputFormatter formatter, string? path, string extension)
@@ -167,6 +145,30 @@ namespace SplitTestSuite
                         outputStream.Close();
                     }
                 }
+            }
+        }
+
+        void Run()
+        {
+            this.LogOptions();
+
+            this._log.Info($"Discovering tests from {this.parameters.TestSuitePath}");
+            var testSuite = this.ReadTestSuite(this.parameters.TestSuitePath);
+
+            this._log.Info($"Splitting tests in {this.parameters.NumParts} parts");
+            TestSuiteSplitter splitter = this.CreateTestSuiteSplitter();
+            TestSuitePartition testSuitePartition = splitter.Split(testSuite, this.parameters.NumParts);
+
+            string? plainTextOutputFile = this.parameters.OutPlainText;
+            if (plainTextOutputFile != null)
+            {
+                this.WriteOutput(testSuitePartition, new PlainTextOutputFormatter(), plainTextOutputFile, PlainTextOutputFileExtension);
+            }
+
+            string? testCaseFilterOutputFile = this.parameters.OutTestCaseFilter;
+            if (testCaseFilterOutputFile != null)
+            {
+                this.WriteOutput(testSuitePartition, new TestCaseFilterOutputFormatter(), testCaseFilterOutputFile, TestCaseFilterOutputFileExtension);
             }
         }
 

@@ -5,9 +5,23 @@
     <TargetFramework>net5.0</TargetFramework>
     <AssemblyVersion>0.0.1</AssemblyVersion>
     <FileVersion>0.0.1</FileVersion>
-    <PackageVersion>0.0.1</PackageVersion>
-    <IsPackable>false</IsPackable>
+    <PackageVersion>0.0.1-alpha</PackageVersion>
+    <IsPackable>true</IsPackable>
     <Nullable>enable</Nullable>
+    <Description>A CLI program to split a unit tests suite into several parts
+(generally to parallelize its execution).
+Several output formats are available.
+ </Description>
+    <Copyright>Copyright (c) Rodolphe Saugier 2021</Copyright>
+    <PackageProjectUrl>https://github.com/rsaugier/SplitTestSuite</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/rsaugier/SplitTestSuite</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>tests unit integration split suite</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Title>SplitTestSuite</Title>
+    <Authors>Rodolphe Saugier</Authors>
+    <PackageReleaseNotes>Experimental early version (WIP)</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
