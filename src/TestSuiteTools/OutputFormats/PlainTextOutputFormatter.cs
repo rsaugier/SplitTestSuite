@@ -5,6 +5,8 @@ namespace TestSuiteTools.OutputFormats
 {
     public class PlainTextOutputFormatter : IOutputFormatter
     {
+        public string FormatDisplayName => "Plain text tests list";
+
         public void Output(ITestSuitePart testSuitePart, Stream outputStream)
         {
             var writer = new StreamWriter(outputStream);

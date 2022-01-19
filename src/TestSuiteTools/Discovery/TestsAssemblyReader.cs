@@ -17,7 +17,7 @@ namespace TestSuiteTools.Discovery
 
         public bool BuildTestSuite(TestSuiteBuilder suiteBuilder)
         {
-            this._log.Info($"Loading assembly {this.assemblyPath} to search for tests");
+            this._log.Debug($"Loading assembly {this.assemblyPath} to search for tests");
             Assembly assembly = Assembly.LoadFrom(this.assemblyPath);
 
             bool atLeastOneTestFound = false;

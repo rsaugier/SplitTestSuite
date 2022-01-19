@@ -1,11 +1,13 @@
-﻿using System;
+﻿namespace TestSuiteTools.UnitTests
+{
+using System;
 using TestSuiteTools;
 
 namespace SplitTestSuite
 {
-    public class ConsoleLog : ILog
+    public class TestsConsoleLog : ILog
     {
-        public ConsoleLog()
+        public TestsConsoleLog()
         {
         }
 
@@ -37,7 +39,7 @@ namespace SplitTestSuite
 
         public void Info(string message)
         {
-            Console.WriteLine(message);
+            Console.WriteLine($"INFO: {message}");
         }
 
         public void Info(params string[] messages)
@@ -61,4 +63,5 @@ namespace SplitTestSuite
             }
         }
     }
+}
 }

@@ -2,6 +2,7 @@
 using TestSuiteTools.Model;
 using TestSuiteTools.Model.Builders;
 using TestSuiteTools.OutputFormats;
+using TestSuiteTools.UnitTests.SplitTestSuite;
 using Xunit;
 
 namespace TestSuiteTools.UnitTests
@@ -47,7 +48,7 @@ namespace TestSuiteTools.UnitTests
 
         private IOutputFormatter CreateFormatter()
         {
-            return new TestCaseFilterOutputFormatter();
+            return new TestCaseFilterOutputFormatter(new TestsConsoleLog());
         }
     }
 }

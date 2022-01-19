@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using CommandLine;
 using TestSuiteTools;
 using TestSuiteTools.Discovery;
@@ -12,75 +14,6 @@ using TestSuiteTools.Splitting.SplitStrategy;
 
 namespace SplitTestSuite
 {
-    enum Granularity
-    {
-        Method,
-        Class,
-        Namespace,
-        Assembly
-    }
-
-    class ProgramParams
-    {
-        public ProgramParams(
-            string testSuitePath,
-            int numParts,
-            int? part,
-            bool quiet,
-            string? outTestCaseFilter,
-            string? outPlainText,
-            Granularity granularity)
-        {
-            this.TestSuitePath = testSuitePath;
-            this.NumParts = numParts;
-            this.Part = part;
-            this.Quiet = quiet;
-            this.OutTestCaseFilter = outTestCaseFilter;
-            this.OutPlainText = outPlainText;
-            this.Granularity = granularity;
-        }
-
-        [Value(0,
-            MetaName = "test-suite-path",
-            Required = true,
-            HelpText = "Path to the input test suite (either a single assembly/exe or a folder with assemblies).")]
-        public string TestSuitePath { get; }
-
-        [Option('n', "num-parts", Required = true, HelpText = "The number of parts to split the test suite into.")]
-        public int NumParts { get; }
-
-        [Option(
-            'p',
-            "part",
-            Required = false,
-            HelpText = "A part index (between 0 and num-parts-1). If specified, only the specified part is output.")]
-        public int? Part { get; }
-
-        [Option('q', "quiet", Required = false, HelpText = "Don't output anything.")]
-        public bool Quiet { get; }
-
-        [Option("out-filter",
-            Required = false,
-            HelpText = "Output as TestCaseFilter",
-            MetaValue = "FILENAME",
-            Group = "output-formats")]
-        public string? OutTestCaseFilter { get; }
-
-        [Option("out-plain",
-            Required = false,
-            HelpText = "Output as plain text list",
-            MetaValue = "FILENAME",
-            Group = "output-formats")]
-        public string? OutPlainText { get; }
-
-        [Option(
-            'g',
-            "granularity",
-            Required = false,
-            HelpText = "The granularity of the split.")]
-        public Granularity Granularity { get; }
-    };
-
     class Program
     {
         private const string PlainTextOutputFileExtension = "txt";
@@ -91,7 +24,9 @@ namespace SplitTestSuite
         private Program(ProgramParams parameters)
         {
             this.parameters = parameters;
-            this._log = parameters.Quiet ? new NullLog() : new ConsoleLog();
+            this._log = parameters.Quiet ?
+                        new NullLog() :
+                        (new LogFilter(new ConsoleLog(), parameters.LogLevel));
         }
 
         static void Main(string[] args)
@@ -106,10 +41,16 @@ namespace SplitTestSuite
 
         void LogOptions()
         {
+            this._log.Info($"Input tests assemblies / folders:");
+            this._log.Info(this.parameters.TestSuiteFilesAndFolders.ToArray());
             this._log.Info(
-                $"Input tests path: {this.parameters.TestSuitePath}",
+                $"Recurse subdirectories: {this.parameters.Recurse}",
                 $"Number of parts: {this.parameters.NumParts}",
-                $"Wanted part: {this.parameters.Part}," +
+                $"Wanted part index: {this.parameters.Part}",
+                $"Split granularity: {this.parameters.Granularity}",
+                $"Plain text output file: {this.parameters.OutPlainText ?? "<none>"}",
+                $"Test case filter output file: {this.parameters.OutTestCaseFilter ?? "<none>"}",
+                $"Log level: {this.parameters.LogLevel}" + (this.parameters.Quiet ? " (but quiet so no output!)" : ""),
                 $"Quiet: {this.parameters.Quiet}");
         }
 
@@ -122,7 +63,7 @@ namespace SplitTestSuite
 
             if (this.parameters.Part.HasValue)
             {
-                this._log.Info($"Writing part {this.parameters.Part.Value} to {path}");
+                this._log.Info($"Writing part {this.parameters.Part.Value} to '{path}' as '{formatter.FormatDisplayName}'");
                 using (var outputStream = this.OpenFile(path))
                 {
                     formatter.Output(
@@ -136,7 +77,7 @@ namespace SplitTestSuite
                 for (int part = 0; part < this.parameters.NumParts; ++part)
                 {
                     string partOutputPath = this.SuffixOutputFilePath(path, part);
-                    this._log.Info($"Writing part {part} to {partOutputPath}");
+                    this._log.Info($"Writing part {part} to '{partOutputPath}' as '{formatter.FormatDisplayName}'");
                     using (var outputStream = this.OpenFile(partOutputPath))
                     {
                         formatter.Output(
@@ -152,9 +93,9 @@ namespace SplitTestSuite
         {
             this.LogOptions();
 
-            this._log.Info($"Discovering tests from {this.parameters.TestSuitePath}");
-            var testSuite = this.ReadTestSuite(this.parameters.TestSuitePath);
-
+            this._log.Info($"Discovering tests...");
+            var testSuite = this.ReadTestSuite(this.parameters.TestSuiteFilesAndFolders);
+            this._log.Info($"Total test assemblies found: {testSuite.TestAssemblies.Count}");
             this._log.Info($"Splitting tests in {this.parameters.NumParts} parts");
             TestSuiteSplitter splitter = this.CreateTestSuiteSplitter();
             TestSuitePartition testSuitePartition = splitter.Split(testSuite, this.parameters.NumParts);
@@ -162,13 +103,21 @@ namespace SplitTestSuite
             string? plainTextOutputFile = this.parameters.OutPlainText;
             if (plainTextOutputFile != null)
             {
-                this.WriteOutput(testSuitePartition, new PlainTextOutputFormatter(), plainTextOutputFile, PlainTextOutputFileExtension);
+                this.WriteOutput(
+                    testSuitePartition,
+                    new PlainTextOutputFormatter(),
+                    plainTextOutputFile,
+                    PlainTextOutputFileExtension);
             }
 
             string? testCaseFilterOutputFile = this.parameters.OutTestCaseFilter;
             if (testCaseFilterOutputFile != null)
             {
-                this.WriteOutput(testSuitePartition, new TestCaseFilterOutputFormatter(), testCaseFilterOutputFile, TestCaseFilterOutputFileExtension);
+                this.WriteOutput(
+                    testSuitePartition,
+                    new TestCaseFilterOutputFormatter(this._log),
+                    testCaseFilterOutputFile,
+                    TestCaseFilterOutputFileExtension);
             }
         }
 
@@ -186,18 +135,21 @@ namespace SplitTestSuite
 
         private FileStream OpenFile(string filePath) => new(filePath, FileMode.Create);
 
-        private TestSuite ReadTestSuite(string testSuitePath)
+        private TestSuite ReadTestSuite(IEnumerable<string> filesOrFolders)
         {
-            TestSuiteBuilder suiteBuilder = new TestSuiteBuilder();
-            if (Directory.Exists(testSuitePath))
+            var suiteBuilder = new TestSuiteBuilder();
+            foreach (string path in filesOrFolders)
             {
-                var crawler = new TestsFolderCrawler(testSuitePath, this._log);
-                crawler.BuildTestSuite(suiteBuilder);
-            }
-            else if (File.Exists(testSuitePath))
-            {
-                var reader = new TestsAssemblyReader(testSuitePath, this._log);
-                reader.BuildTestSuite(suiteBuilder);
+                if (Directory.Exists(path))
+                {
+                    var crawler = new TestsFolderCrawler(path, this.parameters.Recurse, this._log);
+                    crawler.BuildTestSuite(suiteBuilder);
+                }
+                else if (File.Exists(path))
+                {
+                    var reader = new TestsAssemblyReader(path, this._log);
+                    reader.BuildTestSuite(suiteBuilder);
+                }
             }
             return suiteBuilder.Build();
         }

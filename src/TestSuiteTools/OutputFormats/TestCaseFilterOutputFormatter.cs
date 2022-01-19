@@ -7,6 +7,14 @@ namespace TestSuiteTools.OutputFormats
 {
     public class TestCaseFilterOutputFormatter : IOutputFormatter
     {
+        private readonly ILog log;
+        public string FormatDisplayName => "Test case filter";
+
+        public TestCaseFilterOutputFormatter(ILog log)
+        {
+            this.log = log;
+        }
+
         public void Output(ITestSuitePart testSuitePart, Stream outputStream)
         {
             var writer = new StreamWriter(outputStream);
@@ -19,10 +27,11 @@ namespace TestSuiteTools.OutputFormats
             writer.Flush();
         }
 
-        private static void OutputAssemblyPart(ITestAssemblyPart testAssembly, List<string> filters)
+        private void OutputAssemblyPart(ITestAssemblyPart testAssembly, List<string> filters)
         {
             if (testAssembly.IsWhole)
             {
+                this.log.Debug($"Assembly {testAssembly.Path} is wholly included in part");
                 OutputWholeAssembly(testAssembly, filters);
             }
             else
@@ -31,12 +40,13 @@ namespace TestSuiteTools.OutputFormats
             }
         }
 
-        private static void OutputNamespacePart(ITestAssemblyPart testAssembly, List<string> filters)
+        private void OutputNamespacePart(ITestAssemblyPart testAssembly, List<string> filters)
         {
             foreach (ITestNamespacePart testNamespace in testAssembly.TestNamespaces)
             {
                 if (testNamespace.IsWhole)
                 {
+                    this.log.Debug($"Namespace {testNamespace.Name} is wholly included in part");
                     OutputWholeNamespace(testNamespace, filters);
                 }
                 else
@@ -46,12 +56,13 @@ namespace TestSuiteTools.OutputFormats
             }
         }
 
-        private static void OutputClassPart(List<string> filters, ITestNamespacePart testNamespace)
+        private void OutputClassPart(List<string> filters, ITestNamespacePart testNamespace)
         {
             foreach (ITestClassPart testClass in testNamespace.TestClasses)
             {
                 if (testClass.IsWhole)
                 {
+                    this.log.Debug($"Class {testClass.Name} is wholly included in part");
                     filters.Add($"ClassName={testClass.QualifiedName}");
                 }
                 else

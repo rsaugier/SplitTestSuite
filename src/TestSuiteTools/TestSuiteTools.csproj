@@ -17,6 +17,8 @@ This library is used by the SplitTestSuite CLI tool which is where it originated
         <RepositoryType>git</RepositoryType>
         <PackageTags>test suite tools split</PackageTags>
         <PackageReleaseNotes>Experimental early version (WIP)</PackageReleaseNotes>
+        <AssemblyVersion>0.0.1</AssemblyVersion>
+        <FileVersion>0.0.1</FileVersion>
     </PropertyGroup>
 
 </Project>
